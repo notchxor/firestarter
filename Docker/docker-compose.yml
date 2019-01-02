@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  node:
+    image: fire-eos
+    command: nodeos --data-dir /mnt/dev/data --config /mnt/dev/data/config.ini
+    hostname: node
+    container_name: firestarter_node
+    ports:
+      - "8888:8888"
+      - "9876:9876"
+    volumes:
+      - ./node/data:/mnt/dev/data
+      - ./node/config.ini:/mnt/dev/data/config.ini
+
+
+  wallet:
+    image: fire-eos
+    command: /opt/eosio/bin/keosd --data-dir /opt/eosio/bin/data-dir --http-server-address 127.0.0.1:8888
+    hostname: wallet
+    container_name: fire_wallet
+    links:
+      - node
+    volumes:
+      - ./wallet:/opt/eosio/bin/data-dir
+      - ./work:/work
+
