@@ -3,7 +3,8 @@ version: "3"
 services:
   node:
     image: fire-eos
-    command: nodeos --data-dir /mnt/dev/data --config /mnt/dev/data/config.ini
+    #command: /mnt/dev/data/nodeos-bos --data-dir /mnt/dev/data --config /mnt/dev/data/config.ini --genesis-json /mnt/dev/data/genesis.json
+    command: /mnt/dev/data/nodeos --data-dir /mnt/dev/data --config /mnt/dev/data/config.ini 
     hostname: node
     container_name: firestarter_node
     ports:

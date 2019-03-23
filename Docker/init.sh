@@ -1,8 +1,5 @@
 cp config-file node/config.ini
-BPS="aaablockprod bbbblockprod cccblockprod dddblockprod eeeblockprod fffblockprod gggblockprod hhhblockprod
-iiiblockprod jjjblockprod kkkblockprod lllblockprod mmmblockprod nnnblockprod oooblockprod pppblockprod qqqblockprod
-rrrblockprod sssblockprod tttblockprod uuublockprod vvvblockprod wwwblockprod"
-
+BPS="aaablockprod bbbblockprod cccblockprod dddblockprod eeeblockprod fffblockprod gggblockprod hhhblockprod iiiblockprod jjjblockprod kkkblockprod lllblockprod mmmblockprod nnnblockprod ooobloc    kprod pppblockprod qqqblockprod rrrblockprod sssblockprod tttblockprod uuublockprod vvvblockprod wwwblockprod devdevdevdev xxxblockprod yyyblockprod zzzblockprod tstblockprod"
 
 
 for bp in $BPS;do

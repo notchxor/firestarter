@@ -13,9 +13,8 @@ EOSIO_PRIV=5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
 SIGN_PUB=EOS7HWfNo5DHkWndg48xQfn5EGBvz3XxoveCtjQ2GHVmAg5ibZRNN
 SIGN_PRIV=5J4gZSeebvRK7ZFxcL4WqV4Lhttm7453B6duCGxYjC6DM9SN6uu
 
-BPS="aaablockprod bbbblockprod cccblockprod dddblockprod eeeblockprod fffblockprod gggblockprod hhhblockprod
-iiiblockprod jjjblockprod kkkblockprod lllblockprod mmmblockprod nnnblockprod oooblockprod pppblockprod qqqblockprod
-rrrblockprod sssblockprod tttblockprod uuublockprod vvvblockprod wwwblockprod"
+BPS="aaablockprod bbbblockprod cccblockprod dddblockprod eeeblockprod fffblockprod gggblockprod hhhblockprod iiiblockprod jjjblockprod kkkblockprod lllblockprod mmmblockprod nnnblockprod oooblockprod pppblockprod qqqblockprod rrrblockprod sssblockprod tttblockprod uuublockprod vvvblockprod wwwblockprod"
+EXTRA="devdevdevdev xxxblockprod yyyblockprod zzzblockprod tstblockprod"
 
 # Create wallet
 ./cleos.sh wallet create --to-console > wallet.txt
@@ -46,6 +45,10 @@ for BP in  $BPS ;do
  #   ./cleos.sh system newaccount eosio $BP $EOSIO_PUB $EOSIO_PUB  --stake-net "100000.0000 EOS" --stake-cpu "1000000.0000 EOS" --buy-ram "10000.0000 EOS"
 done
 
+for BP in  $EXTRA ;do
+    ./cleos.sh create account eosio $BP $EOSIO_PUB $EOSIO_PUB
+ #   ./cleos.sh system newaccount eosio $BP $EOSIO_PUB $EOSIO_PUB  --stake-net "100000.0000 EOS" --stake-cpu "1000000.0000 EOS" --buy-ram "10000.0000 EOS"
+done
 
 
 # SET PRODUCERS
@@ -61,18 +64,16 @@ for bp in $BPS; do
 # Issue eosio
 echo "ISSUING EOSIO ##################"
 ./cleos.sh push action eosio.token create '[ "eosio","1000000000.0000 EOS"]' -p eosio.token
-./cleos.sh push action eosio.token issue '["eosio","100000000.0000 EOS", "issue EOS"]' -p eosio
+./cleos.sh push action eosio.token issue '["eosio","1000000000.0000 EOS", "issue EOS"]' -p eosio
+
+
 
 # set system
 echo "SET SYSTEM ##################"
 ./cleos.sh set contract  eosio /contracts/eosio.system 
-
-
  # Privilegios
 echo "PRIVILEGIOS ###############"
 ./cleos.sh push action eosio setpriv  '["eosio.msig", 1]' -p eosio@active
-
-
 
 
 
@@ -90,4 +91,22 @@ for account in  $SYSTEM_ACCOUNTS;do
  ./cleos.sh push action eosio updateauth "$(cat tmp)" -p $account@owner
 done
 
+
+# Transfer Tokens to devdevdevdev
+echo "Transfer tokens to dev account"
+./cleos.sh system buyram -k eosio devdevdevdev 1000
+./cleos.sh transfer eosio devdevdevdev "500000000.0000 EOS" "it's xmas"
+# delegatebw
+echo "Delegatebw dev"
+./cleos.sh system delegatebw devdevdevdev devdevdevdev "100000000.0000 EOS" "100000000.0000 EOS"
+
+# reg prod
+echo "regprod dev"
+./cleos.sh system regproducer devdevdevdev EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV  https://www.eosargentina.io 32
+
+for bp in $BPS;do
+    ./cleos.sh system regproducer $bp EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV  https://www.$bp.io 32;done
+# Vote for producers
+echo "voteproducers"
+./cleos.sh system voteproducer prods devdevdevdev $BPS
 
